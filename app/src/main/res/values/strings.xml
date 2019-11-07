@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Virtual Notice Board</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_create_account">Create Account</string>
+    <string name="registration_hint">Registration #</string>
+    <string name="email_address">Email Address</string>
+    <string name="password_hint">Password</string>
+    <string name="phone_hint">Phone</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="title_activity_news_headlines">Latest Notices</string>
+    <string name="no_news_posted">You currently have no news to view</string>
+    <string name="title_activity_news_details">Notice Details</string>
+    <string name="card_title">September - December Timetable Released</string>
+    <string name="action_share">SHARE</string>
+    <string name="action_explore">EDIT</string>
+    <string name="card_content">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="created_at">Published on 15/11/2019 4:23 PM</string>
+    <string name="title_placeholder">Notice - 12/11/2019</string>
+    <string name="news_placeholder">Time table Released for Sept - December</string>
+    <string name="sample_description">This is to notify you that the Sept - December time table has been released. You are urged to report any issues!</string>
+    <string name="title_activity_add_new_notice">Add New Notice</string>
+    <string name="notice_subject">Subject</string>
+    <string name="notice_description">Description</string>
+    <string name="search">Search...</string>
+</resources>
