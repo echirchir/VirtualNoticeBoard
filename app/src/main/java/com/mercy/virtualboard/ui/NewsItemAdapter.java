@@ -1,24 +1,36 @@
 package com.mercy.virtualboard.ui;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.mercy.virtualboard.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemViewHolder>{
 
     private List<NewsUIObject> items;
+    private Context context;
 
-    public NewsItemAdapter(List<NewsUIObject> notices) {
-        items = new ArrayList<>(notices);
+    public NewsItemAdapter(List<NewsUIObject> notices, Context context) {
+        this.items = new ArrayList<>(notices);
+        this.context = context;
     }
 
     @Override
@@ -35,6 +47,15 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemViewHolder>{
         holder.noticeTitle.setText("Notice - " + items.get(position).getDate());
         holder.newsTitle.setText(items.get(position).getTitle());
         holder.newsDescription.setText(items.get(position).getDescription());
+
+        File c = new File(items.get(position).getPhoto_path());
+
+        Glide
+                .with(context)
+                .load(c)
+                .centerCrop()
+                .placeholder(R.mipmap.notice_header)
+                .into(holder.photo);
     }
 
     @Override

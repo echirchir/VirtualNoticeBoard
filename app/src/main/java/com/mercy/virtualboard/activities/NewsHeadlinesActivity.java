@@ -1,6 +1,7 @@
 package com.mercy.virtualboard.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,9 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +45,8 @@ public class NewsHeadlinesActivity extends AppCompatActivity implements SearchVi
     private NewsItemAdapter adapter;
     private List<NewsUIObject> newsUIObjects;
     private Realm realm;
+
+    public static final int PERMISSAO_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,14 @@ public class NewsHeadlinesActivity extends AppCompatActivity implements SearchVi
             }
         }
 
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+
+            }else{
+                ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSAO_REQUEST );
+            }
+        }
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +114,18 @@ public class NewsHeadlinesActivity extends AppCompatActivity implements SearchVi
         loadNotices();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == PERMISSAO_REQUEST){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }else{
+
+            }
+            return;
+        }
+    }
+
     private void loadNotices(){
 
         newsUIObjects = new ArrayList<>();
@@ -114,6 +139,7 @@ public class NewsHeadlinesActivity extends AppCompatActivity implements SearchVi
                 NewsUIObject object = new NewsUIObject();
                 object.setDate(item.getCreated_on());
                 object.setTitle(item.getTitle());
+                object.setPhoto_path(item.getPhoto_path());
                 if (item.getDescription().length() > 100){
                     object.setDescription(item.getDescription().substring(0, 100));
                 }else{
@@ -126,7 +152,7 @@ public class NewsHeadlinesActivity extends AppCompatActivity implements SearchVi
             }
         }
 
-        adapter = new NewsItemAdapter(newsUIObjects);
+        adapter = new NewsItemAdapter(newsUIObjects, this);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

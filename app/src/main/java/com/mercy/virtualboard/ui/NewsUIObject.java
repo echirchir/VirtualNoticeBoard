@@ -6,6 +6,7 @@ public class NewsUIObject {
     private String date;
     private String title;
     private String description;
+    private String photo_path;
 
     public long getId() {
         return id;
@@ -37,5 +38,13 @@ public class NewsUIObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPhoto_path() {
+        return photo_path;
+    }
+
+    public void setPhoto_path(String photo_path) {
+        this.photo_path = photo_path;
     }
 }

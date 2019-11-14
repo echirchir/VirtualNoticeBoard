@@ -11,6 +11,8 @@ public class News extends RealmObject {
 
     private String title;
     private String description;
+    private String photo_path;
+    private String timetable_path;
     private String created_on;
     private String author;
 
@@ -36,6 +38,22 @@ public class News extends RealmObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPhoto_path() {
+        return photo_path;
+    }
+
+    public void setPhoto_path(String photo_path) {
+        this.photo_path = photo_path;
+    }
+
+    public String getTimetable_path() {
+        return timetable_path;
+    }
+
+    public void setTimetable_path(String timetable_path) {
+        this.timetable_path = timetable_path;
     }
 
     public String getCreated_on() {

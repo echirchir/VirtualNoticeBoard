@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mercy.virtualboard">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".VirtualNoticeBoardApplication"
         android:allowBackup="true"
@@ -13,7 +16,6 @@
         <activity
             android:name=".activities.AddNewNoticeActivity"
             android:label="@string/title_activity_add_new_notice"
-            android:noHistory="true"
             android:windowSoftInputMode="adjustPan|adjustResize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         }else{
 
             userNameWrapper.setErrorEnabled(false);
+
             final User toLoggIn = realm.where(User.class).equalTo("email_address", username_val).equalTo("password", password_val).findFirst();
 
             if (toLoggIn == null){
@@ -99,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                         realm.copyToRealmOrUpdate(toLoggIn);
                     }
                 });
+
                 startActivity( new Intent( this, NewsHeadlinesActivity.class));
             }
         }
