@@ -1,20 +1,24 @@
 package com.mercy.virtualboard.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.telephony.SmsManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.mercy.virtualboard.R;
@@ -46,6 +50,7 @@ public class AddNewNoticeActivity extends AppCompatActivity {
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static int RESULT_LOAD_TIMETABLE = 2;
+    public static final int SMS_PERMISSIONS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +128,26 @@ public class AddNewNoticeActivity extends AppCompatActivity {
                 showFileChooser();
             }
         });
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)!= PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.SEND_SMS)){
+
+            }else{
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.SEND_SMS}, SMS_PERMISSIONS );
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == SMS_PERMISSIONS){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }else{
+
+            }
+            return;
+        }
     }
 
     public void showFileChooser() {
@@ -140,28 +165,6 @@ public class AddNewNoticeActivity extends AppCompatActivity {
             Toast.makeText(this, "Please install a File Manager.", Toast.LENGTH_SHORT).show();
         }
 
-    }
-
-    private void openExcelFileChooser(){
-
-        String[] mimeTypes = {"application/vnd.ms-excel","application/pdf","application/msword","application/vnd.ms-powerpoint","text/plain"};
-
-        Intent intent = new Intent(Intent.ACTION_PICK);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            intent.setType(mimeTypes.length == 1 ? mimeTypes[0] : "*/*");
-            if (mimeTypes.length > 0) {
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-            }
-        } else {
-            String mimeTypesStr = "";
-            for (String mimeType : mimeTypes) {
-                mimeTypesStr += mimeType + "|";
-            }
-            intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
-        }
-
-        startActivityForResult(Intent.createChooser(intent,"Choose Timetable"), RESULT_LOAD_TIMETABLE);
     }
 
     @Override
@@ -186,8 +189,6 @@ public class AddNewNoticeActivity extends AppCompatActivity {
 
             }else if (requestCode == RESULT_LOAD_TIMETABLE && data != null){
 
-                Log.d("FILELOCALEXTE", data.getData().toString()) ;
-
                 File file = new File(data.getData().toString());
                 selectTimetable.setText(file.getAbsolutePath());
 
@@ -195,12 +196,25 @@ public class AddNewNoticeActivity extends AppCompatActivity {
 
                 } else {
                     for (int i = 0; i < data.getClipData().getItemCount(); i++) {
-                        Log.d("EXCELDATA", "data.getClipData().getItemAt(i).getUri().toString()" + data.getClipData().getItemAt(i).getUri().toString());
+
                     }
                 }
             }
         }
 
+    }
+
+    public void sendSmsNotification(String phoneNo, String msg) {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, msg, null, null);
+            Toast.makeText(getApplicationContext(), "SMS notification sent",
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception ex) {
+            Toast.makeText(getApplicationContext(),ex.getMessage(),
+                    Toast.LENGTH_LONG).show();
+            ex.printStackTrace();
+        }
     }
 
     private void storeAndRedirect(String sub, String details, String path, String timetable){
@@ -231,6 +245,8 @@ public class AddNewNoticeActivity extends AppCompatActivity {
                 realm.copyToRealm(toAdd);
             }
         });
+
+        sendSmsNotification(user.getPhone_number(), sub);
 
         startActivity( new Intent( this, NewsHeadlinesActivity.class));
     }
